@@ -29,7 +29,14 @@
   (println "  A:" (add-2-to-2020))
   (println "  B:" (add-3-to-2020)))
 
+(defn die
+  "Print a `message` and exit the program with the given `status` code."
+  [status message]
+  (println message)
+  (System/exit status))
+
 (defn -main
   [d]
   (case (read-string d)
-    1 (solve-day-1)))
+    1 (solve-day-1)
+    (die 1 "Incorrect day provided.")))
