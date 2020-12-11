@@ -1,14 +1,12 @@
 (ns advent-2020.core
-  (:require [clojure.tools.cli :refer [parse-opts]]
-            [clojure.string :as str])
+  (:require [clojure.string :as str])
   (:gen-class))
 
 (def input-1
   (map read-string (str/split-lines (slurp "resources/input-1.txt"))))
 
-(defn add-to-2020
+(defn add-2-to-2020
   []
-  ;;(reduce * (set (remove nil? (flatten (for [a input-1] (map #(when (= 2020 (+ a %)) [a %]) input-1)))))))
   (as-> input-1 <>
       (for [a <>] (map #(when (= 2020 (+ a %)) [a %]) <>))
       (flatten <>)
@@ -16,8 +14,22 @@
       (set <>)
       (reduce * <>)))
 
+(defn add-3-to-2020
+  []
+  (as-> input-1 <>
+      (for [a <>] (for [b <>] (map #(when (= 2020 (+ a b %)) [a b %]) <>)))
+      (flatten <>)
+      (remove nil? <>)
+      (set <>)
+      (reduce * <>)))
+
+(defn solve-day-1
+  []
+  (println "Solutions for Day 1:")
+  (println "  A:" (add-2-to-2020))
+  (println "  B:" (add-3-to-2020)))
 
 (defn -main
-  "I don't do a whole lot ... yet."
-  [& args]
-  (println "Hello, World!"))
+  [d]
+  (case (read-string d)
+    1 (solve-day-1)))
