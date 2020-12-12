@@ -79,9 +79,55 @@
   (println "  A:" (count (all-valid-passwords valid-sled-password?)))
   (println "  B:" (count (all-valid-passwords valid-toboggan-password?))))
 
+(def input-3
+  (str/split-lines (slurp "resources/input-3.txt")))
+
+(defn calculate-toboggan-positions
+  [right down]
+  (let [rows (/ (count input-3) down)]
+    (as-> (take rows (iterate (partial + right) 0)) <>
+      (zipmap (map #(keyword (str %)) (take rows (iterate (partial + down) 0)))
+              (map #(if (> % 30) (mod % 31) %) <>)))))
+
+(defn calculate-tree-hits
+  [right down]
+  (let [positions (calculate-toboggan-positions right down)]
+    (for [k (keys positions)]
+      (let [position (k positions)
+            row (read-string (last (str/split (str k) #":")))
+            c (subs (get input-3 row) position (inc position))]
+        (when (= "#" c)
+          c)))))
+
+(defn only-tree-hits
+  [right down]
+  (remove nil? (calculate-tree-hits right down)))
+
+(defn tree-hit-count
+  [right down]
+  (count (only-tree-hits right down)))
+
+(def slopes
+  [[1 1] [3 1] [5 1] [7 1] [1 2]])
+
+(defn tree-hits-in-slopes
+  []
+  (for [s slopes]
+    (tree-hit-count (first s) (last s))))
+
+(def tree-hit-multiple
+  (reduce * (tree-hits-in-slopes)))
+
+(defn solve-day-3
+  []
+  (println "Solutions for Day 3:")
+  (println "  A:" (tree-hit-count 3 1))
+  (println "  B:" tree-hit-multiple))
+
 (defn -main
   [d]
   (case (read-string d)
     1 (solve-day-1)
     2 (solve-day-2)
+    3 (solve-day-3)
     (die 1 "Incorrect day provided.")))
