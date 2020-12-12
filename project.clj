@@ -5,8 +5,7 @@
             :url "none"
             :year 2020
             :key "isc"}
-  :dependencies [[org.clojure/clojure "1.10.1"]
-                 [org.clojure/tools.cli "1.0.194"]]
+  :dependencies [[org.clojure/clojure "1.10.1"]]
   :main ^:skip-aot advent-2020.core
   :target-path "target/%s"
   :profiles {:uberjar {:aot :all
