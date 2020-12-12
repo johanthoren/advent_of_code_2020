@@ -1,5 +1,6 @@
 (ns advent-2020.core
-  (:require [clojure.string :as str])
+  (:require [clojure.set :refer [difference]]
+            [clojure.string :as str])
   (:gen-class))
 
 (def input-1
@@ -274,7 +275,7 @@
          (find-row-or-seat (drop 1 b) (drop (/ range-length 2) range))))))
   ([b]
    (if (= 3 (count b))
-     (find-row-or-seat b (range 0 7))
+     (find-row-or-seat b (range 0 8))
      (find-row-or-seat b (range 0 128)))))
 
 (defn find-all-rows-and-seats
@@ -291,10 +292,15 @@
   []
   (last (sort (calculate-seat-ids))))
 
+(defn find-correct-seat
+  []
+  (first (difference (set (range 12 859)) (set (calculate-seat-ids)))))
+
 (defn solve-day-5
   []
   (println "Solutions for Day 5:")
-  (println "  A:" (highest-seat-id)))
+  (println "  A:" (highest-seat-id))
+  (println "  B:" (find-correct-seat)))
 
 (defn -main
   [d]
