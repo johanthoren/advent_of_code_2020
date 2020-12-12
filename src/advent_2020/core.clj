@@ -181,7 +181,7 @@
            measure (read-string (if (seq ending)
                                   (first (str/split h (re-pattern ending)))
                                   h))]
-        (when (and (not (empty? ending)) (hgt-within-range? measure ending))
+        (when (and (seq ending)) (hgt-within-range? measure ending)
           true)))))
 
 (defn valid-hcl?
@@ -213,32 +213,18 @@
   []
   (count (remove nil? (for [p input-4] (valid-nof? p)))))
 
-(defn all-valid-passports
+(defn count-all-valid-passports
   []
-  (remove nil? (for [p input-4]
-                 (when (and (valid-nof? p)
-                            (valid-byr? p)
-                            (valid-iyr? p)
-                            (valid-eyr? p)
-                            (valid-hgt? p)
-                            (valid-hcl? p)
-                            (valid-ecl? p)
-                            (valid-pid? p))
-                   p))))
-
-(defn all-invalid-passports
-  []
-  (remove nil? (for [p input-4]
-                 (when-not (and (valid-nof? p)
-                                (valid-byr? p)
-                                (valid-iyr? p)
-                                (valid-eyr? p)
-                                (valid-hgt? p)
-                                (valid-hcl? p)
-                                (valid-ecl? p)
-                                (valid-pid? p))
-                   p))))
-
+  (count (remove nil? (for [p input-4]
+                        (when (and (valid-nof? p)
+                                   (valid-byr? p)
+                                   (valid-iyr? p)
+                                   (valid-eyr? p)
+                                   (valid-hgt? p)
+                                   (valid-hcl? p)
+                                   (valid-ecl? p)
+                                   (valid-pid? p))
+                          p)))))
 
 (defn solve-day-4
   []
@@ -260,7 +246,6 @@
   (as-> (slurp "resources/input-5.txt") <>
     (str/split-lines <>)
     (for [s <>] [(subs s 0 7) (subs s 7)])))
-
 
 (def binary-input-5
   (for [s input-5] (flatten (map fblr-to-01 s))))
