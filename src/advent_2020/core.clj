@@ -1,5 +1,5 @@
 (ns advent-2020.core
-  (:require [clojure.set :refer [difference]]
+  (:require [clojure.set :refer [difference intersection]]
             [clojure.string :as str])
   (:gen-class))
 
@@ -287,6 +287,33 @@
   (println "  A:" (highest-seat-id))
   (println "  B:" (find-correct-seat)))
 
+(def input-6 (slurp "resources/input-6.txt"))
+
+(def solution-6-a
+  (as-> input-6 <>
+    (str/split <> #"\n\n")
+    (map #(str/replace % #"\n" "") <>)
+    (map set <>)
+    (map count <>)
+    (reduce + <>)))
+
+(def solution-6-b
+  (as-> input-6 <>
+    (str/split <> #"\n\n")
+    (map #(str/replace % #"\n" " ") <>)
+    (map str/trimr <>)
+    (map #(str/split % #" ") <>)
+    (for [g <>] (map set g))
+    (map #(apply intersection %) <>)
+    (map count <>)
+    (reduce + <>)))
+
+(defn solve-day-6
+  []
+  (println "Solutions for Day 6:")
+  (println "  A:" solution-6-a)
+  (println "  B:" solution-6-b))
+
 (defn -main
   [d]
   (case (read-string d)
@@ -295,4 +322,5 @@
     3 (solve-day-3)
     4 (solve-day-4)
     5 (solve-day-5)
+    6 (solve-day-6)
     (die 1 "Incorrect day provided.")))
