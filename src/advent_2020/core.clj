@@ -328,9 +328,10 @@
     (for [r <>]
       (hash-map (keyword (str (first (first r)) "-"
                               (second (first r))))
-                (map #(hash-map (keyword (str (second %) "-" (last %)))
-                                (first %))
-                     (partition 3 (flatten (rest r))))))))
+                (apply merge (map #(hash-map (keyword (str (second %) "-" (last %)))
+                                             (first %))
+                                  (partition 3 (flatten (rest r)))))))
+    (apply merge <>)))
 
 (defn -main
   [d]
