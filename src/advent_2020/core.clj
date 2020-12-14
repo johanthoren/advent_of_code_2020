@@ -314,6 +314,24 @@
   (println "  A:" solution-6-a)
   (println "  B:" solution-6-b))
 
+(def input-7
+  (str/split (slurp "resources/input-7.txt") #"\n"))
+
+(def bag-rules
+  (as-> input-7 <>
+    (map #(str/replace % #"\,|bags|bag|contain|\." "") <>)
+    (map #(str/replace % #"\s{2,3}" " ") <>)
+    (map str/trimr <>)
+    (map #(str/split % #" ") <>)
+    (for [r <>] (map #(if (= 1 (count %)) (read-string %) %) r))
+    (map #(partition-by int? %) <>)
+    (for [r <>]
+      (hash-map (keyword (str (first (first r)) "-"
+                              (second (first r))))
+                (map #(hash-map (keyword (str (second %) "-" (last %)))
+                                (first %))
+                     (partition 3 (flatten (rest r))))))))
+
 (defn -main
   [d]
   (case (read-string d)
